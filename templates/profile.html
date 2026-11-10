@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% from 'macros.html' import csrf, card, collection_card, empty with context %}
-{% block title %}Мой профиль · Каталог знаний{% endblock %}
+{% block title %}Мой профиль · Лучше СДО{% endblock %}
 {% block content %}
 <section class="profile-heading"><span class="initial-avatar large">{{ g.user.name[0] }}</span><div><h1>{{ g.user.name }}</h1><p>{{ g.user.group_name ~ ' · ' if g.user.group_name }}{{ g.user.course }} курс</p><p class="profile-bio">{{ g.user.bio or 'Делись знаниями и собирай полезное к сессии.' }}</p></div><div class="profile-actions"><button class="button secondary" data-dialog="edit-profile-dialog">Редактировать профиль</button><form action="{{ url_for('logout') }}" method="post">{{ csrf() }}<button class="text-button">Выйти</button></form></div></section>
 <div class="stats-grid">{% for number,label in [(stats[0],'Загружено'),(stats[1],'В избранном'),(stats[2],'Подборки')] %}<div><strong>{{ number }}</strong><span>{{ label }}</span></div>{% endfor %}</div>

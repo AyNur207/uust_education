@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% from 'macros.html' import csrf, field_error, icon with context %}
-{% block title %}{{ 'Регистрация' if mode == 'register' else 'Вход' }} · Каталог знаний{% endblock %}
+{% block title %}{{ 'Регистрация' if mode == 'register' else 'Вход' }} · Лучше СДО{% endblock %}
 {% block content %}
 <section class="form-panel auth-panel"><div class="auth-symbol">{{ icon('book') }}</div><h1>{{ 'Учиться проще вместе' if mode == 'register' else 'С возвращением!' }}</h1><p class="form-intro">{{ 'Создай аккаунт, чтобы сохранять материалы и делиться своими.' if mode == 'register' else 'Войди, чтобы вернуться к своим материалам и подборкам.' }}</p>
 {% if errors.form %}<p class="field-error form-alert" role="alert">{{ errors.form }}</p>{% endif %}

@@ -1,4 +1,3 @@
-"""Каталог знаний. Run with: python app.py."""
 from __future__ import annotations
 
 import functools

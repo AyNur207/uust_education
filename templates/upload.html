@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% from 'macros.html' import csrf, field_error with context %}
-{% block title %}{{ 'Редактирование' if item else 'Добавить' }} материал · Каталог знаний{% endblock %}
+{% block title %}{{ 'Редактирование' if item else 'Добавить' }} материал · Лучше СДО{% endblock %}
 {% block content %}
 <section class="form-panel upload-panel"><h1>{{ 'Редактирование материала' if item else 'Поделись учебным материалом' }}</h1><p class="form-intro">Добавь файл или полезную ссылку, чтобы другие студенты могли найти их.</p><p class="form-note">* Обязательные поля</p>
 <form method="post" enctype="multipart/form-data" class="stack-form" id="upload-form">{{ csrf() }}

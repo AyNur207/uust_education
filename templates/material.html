@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% from 'macros.html' import csrf, card, icon with context %}
-{% block title %}{{ item.title }} · Каталог знаний{% endblock %}
+{% block title %}{{ item.title }} · Лучше СДО{% endblock %}
 {% block content %}
 <nav class="breadcrumbs" aria-label="Путь"><a href="{{ url_for('home') }}">Главная</a><span>/</span><a href="{{ url_for('catalog', subject=item.subject) }}">{{ item.subject }}</a><span>/</span><span>{{ item.title }}</span></nav>
 <div class="material-layout"><div class="material-main"><h1>{{ item.title }}</h1><div class="material-subtitle"><span class="link-color">{{ item.kind }}</span><span>{{ item.subject }} · {{ item.course }} курс</span></div>

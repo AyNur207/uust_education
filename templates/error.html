@@ -1,3 +1,3 @@
 {% extends 'base.html' %}{% from 'macros.html' import empty with context %}
-{% block title %}{{ code }} · Каталог знаний{% endblock %}
+{% block title %}{{ code }} · Лучше СДО{% endblock %}
 {% block content %}{{ empty(code|string, message, url_for('catalog'),'Вернуться в каталог') }}{% endblock %}

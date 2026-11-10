@@ -33,7 +33,7 @@ def build():
             page = doc.new_page(width=595, height=842)
             page.insert_font(fontname="InterFallback", fontfile=str(FONT))
             page.draw_rect(fitz.Rect(0,0,595,842), color=None, fill=(1,1,1))
-            page.insert_text((48,48), "КАТАЛОГ ЗНАНИЙ · ДЕМОНСТРАЦИОННЫЙ ПРИМЕР", fontname="InterFallback", fontsize=9, color=(.39,.25,.82))
+            page.insert_text((48,48), "Лучше СДО · ДЕМОНСТРАЦИОННЫЙ ПРИМЕР", fontname="InterFallback", fontsize=9, color=(.39,.25,.82))
             page.insert_textbox(fitz.Rect(48,85,547,170), row[0], fontname="InterFallback", fontsize=25, color=(.14,.14,.22))
             text = EXAMPLES[i] if n == 0 else f"Практика · страница {n+1}\n\nЗадание {n}: создай массив из {n+3} целых чисел.\n\n1. Выведи все элементы массива.\n2. Найди сумму элементов.\n3. Найди наибольший элемент.\n4. Подсчитай количество положительных чисел.\n\nПроверь программу на нулях, отрицательных и одинаковых значениях."
             remaining = page.insert_textbox(fitz.Rect(48,190,547,720), text, fontname="InterFallback", fontsize=13, lineheight=1.5, color=(.25,.24,.33))
