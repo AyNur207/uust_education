@@ -1,0 +1,18 @@
+{% extends 'base.html' %}{% from 'macros.html' import card, icon, empty with context %}
+{% block title %}Каталог материалов · Каталог знаний{% endblock %}
+{% block content %}
+<div class="page-heading"><h1>Каталог материалов</h1><p>Знания по твоим предметам — собраны в одном месте.</p></div>
+<form id="catalog-form" action="{{ url_for('catalog') }}" method="get">
+<div class="search-form catalog-search" role="search"><input name="q" value="{{ q }}" placeholder="Поиск по названию, теме или описанию" aria-label="Поиск материалов"><button class="button">Найти</button></div>
+<div class="catalog-layout"><aside class="filters" id="filters-panel"><div class="filter-heading"><h2>Фильтры</h2><button type="button" class="icon-button mobile-only" data-filter-close aria-label="Закрыть фильтры">{{ icon('close') }}</button></div>
+<label for="subject">Дисциплина</label><select name="subject" id="subject" data-auto-submit><option value="">Все дисциплины</option>{% for s in subjects %}<option {{ 'selected' if s == subject }}>{{ s }}</option>{% endfor %}</select>
+<fieldset><legend>Курс</legend><div class="course-options">{% for n in range(1,5) %}<label><input type="checkbox" name="course" value="{{ n }}" {{ 'checked' if course == n|string }} data-course data-auto-submit><span>{{ n }}</span></label>{% endfor %}</div></fieldset>
+<label for="semester">Семестр</label><select name="semester" id="semester" data-auto-submit><option value="">Все семестры</option>{% for n in range(1,9) %}<option value="{{ n }}" {{ 'selected' if semester == n|string }}>{{ n }} семестр</option>{% endfor %}</select>
+<fieldset class="kind-options"><legend>Тип материала</legend>{% for kind in kinds %}<label><input type="checkbox" name="kind" value="{{ kind }}" {{ 'checked' if kind in selected_kinds }} data-auto-submit><span>{{ kind }}</span></label>{% endfor %}</fieldset>
+<a class="reset-filters" href="{{ url_for('catalog') }}">Сбросить фильтры</a><button type="submit" class="button full mobile-only">Применить</button></aside>
+<div class="catalog-results"><div class="result-toolbar"><button type="button" class="button secondary mobile-filter" data-filter-open>{{ icon('filter') }} Фильтры</button><strong>{{ 'Найден' if count % 10 == 1 and count % 100 != 11 else 'Найдено' }} {{ count|material_count }}</strong><select name="sort" aria-label="Сортировать материалы" class="sort-select" data-auto-submit>{% for value,label in [('new','Сначала новые'),('rating','По оценке'),('popular','По популярности'),('title','По названию')] %}<option value="{{ value }}" {{ 'selected' if sort == value }}>{{ label }}</option>{% endfor %}</select></div>
+{% if subject or q %}<div class="active-filters">{% if subject %}<a href="{{ url_for('catalog', q=q) }}">{{ subject }} ×</a>{% endif %}{% if q %}<span>Поиск: {{ q }}</span>{% endif %}</div>{% endif %}
+{% if materials %}<div class="cards-grid two">{% for m in materials %}{{ card(m) }}{% endfor %}</div><nav class="pagination" aria-label="Страницы каталога">{% if page > 1 %}<a href="{{ page_url(page-1) }}" class="button secondary" aria-label="Предыдущая страница">←</a>{% endif %}{% for n in range(1,pages+1) %}<a href="{{ page_url(n) }}" class="button {{ 'current' if page == n else 'secondary' }}" {% if page == n %}aria-current="page"{% endif %}>{{ n }}</a>{% endfor %}{% if page < pages %}<a href="{{ page_url(page+1) }}" class="button secondary" aria-label="Следующая страница">→</a>{% endif %}<span>Страница {{ page }} из {{ pages }}</span></nav><p class="catalog-note">Материалы из макета и рекомендации по матанализу · Учебный каталог</p>
+{% else %}{{ empty('Ничего не нашлось', 'Попробуй другой запрос или сбрось фильтры.', url_for('catalog'), 'Сбросить фильтры') }}{% endif %}
+</div></div></form>
+{% endblock %}

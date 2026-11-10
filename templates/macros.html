@@ -1,0 +1,39 @@
+{% macro icon(name, cls='') -%}
+<svg class="icon {{ cls }}" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+{% if name == 'book' %}<path d="M12 5C9 2 4 3 2 4v16c3-2 7-2 10 0 3-2 7-2 10 0V4c-3-1-7-2-10 1Zm0 0v15"/>
+{% elif name == 'bookmark' %}<path d="M7 3h10v18l-5-4-5 4V3Z"/>
+{% elif name == 'home' %}<path d="m3 10 9-8 9 8v11h-6v-7H9v7H3V10Z"/>
+{% elif name == 'grid' %}<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+{% elif name == 'user' %}<circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/>
+{% elif name == 'bell' %}<path d="M6 8a6 6 0 0 1 12 0v6l2 3H4l2-3V8ZM10 21h4"/>
+{% elif name == 'filter' %}<path d="M3 6h18M6 12h12M9 18h6"/>
+{% elif name == 'plus' %}<path d="M12 4v16M4 12h16"/>
+{% elif name == 'close' %}<path d="m6 6 12 12M18 6 6 18"/>
+{% endif %}</svg>
+{%- endmacro %}
+
+{% macro csrf() %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endmacro %}
+
+{% macro card(m, owner=false, collection_id=none) %}
+<article class="material-card">
+  <div class="card-top"><span class="badge {{ kinds[m.kind] }}">{{ m.kind }}</span>
+    <form method="post" action="{{ url_for('favorite', material_id=m.id) }}" class="favorite-form">{{ csrf() }}<input type="hidden" name="next" value="{{ request.full_path }}"><button class="bookmark {{ 'is-saved' if m.id in saved }}" type="submit" aria-label="{{ 'Убрать из избранного' if m.id in saved else 'В избранное' }}" aria-pressed="{{ 'true' if m.id in saved else 'false' }}">{{ icon('bookmark') }}</button></form>
+  </div>
+  <h3><a href="{{ url_for('material', material_id=m.id) }}">{{ m.title }}</a></h3>
+  <p class="card-description">{{ m.description }}</p>
+  <a class="card-subject" href="{{ url_for('catalog', subject=m.subject) }}">{{ m.subject }} · {{ m.course }} курс · {{ m.topic }}</a>
+  <p class="card-meta">{{ m.format_label }}</p>
+  <p class="card-meta card-author"><span>{{ m.author }}</span><span>★ {{ m.rating|rating }} &nbsp; ↓ {{ m.downloads }}</span></p>
+  <a class="button secondary card-open" href="{{ url_for('material', material_id=m.id) }}">Открыть материал</a>
+  {% if owner %}<div class="card-owner"><a href="{{ url_for('upload', material_id=m.id) }}">Редактировать</a><span>·</span><button class="text-button" type="button" data-delete-url="{{ url_for('delete_material', material_id=m.id) }}" data-delete-title="{{ m.title }}">Удалить</button></div>{% endif %}
+  {% if collection_id %}<form method="post" action="{{ url_for('collection_item', collection_id=collection_id, material_id=m.id) }}">{{ csrf() }}<input type="hidden" name="action" value="remove"><button type="submit" class="text-button remove-item">Убрать из подборки</button></form>{% endif %}
+</article>
+{% endmacro %}
+
+{% macro collection_card(c, home=false) %}
+<article class="collection-card {{ 'blue' if c.id % 2 == 0 }}"><p class="eyebrow">ПОДБОРКА · {{ c.count }} МАТЕРИАЛА</p><h3><a href="{{ url_for('collection', collection_id=c.id) }}">{{ c.title }}</a></h3><p>{{ ('От определений до решения типовых задач.' if c.id == 1 else 'Теория и практика перед контрольной.') if home else c.description }}</p><div class="collection-bottom"><span>{{ c.author }}{% if not home %} · {{ c.created_at|date_ru }}{% endif %}</span><a href="{{ url_for('collection', collection_id=c.id) }}">Открыть подборку →</a></div></article>
+{% endmacro %}
+
+{% macro empty(title, text, href=none, label='Открыть каталог') %}<div class="empty-state">{{ icon('book') }}<h2>{{ title }}</h2><p>{{ text }}</p>{% if href %}<a class="button" href="{{ href }}">{{ label }}</a>{% endif %}</div>{% endmacro %}
+
+{% macro field_error(errors, name) %}{% if errors.get(name) %}<p class="field-error" role="alert">{{ errors[name] }}</p>{% endif %}{% endmacro %}
